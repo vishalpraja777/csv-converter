@@ -16,10 +16,6 @@
   background-color: #252525;
 } */
 
-body {
-  /* background-color: #00000020; */
-}
-
 .login{
 	position: relative;
 	min-height: 95vh;
@@ -78,18 +74,6 @@ body {
   z-index: 5;
 }
 
-.navbar {
-  padding: 0px 20px;
-  width: 600px;
-  display: flex;
-  align-items: center;
-  background-color: #E5322D;
-
-  border-radius: 20px;
-  /* max-width: 600px; */
-  margin: 0 auto;
-  /* border-bottom: 1px solid #f2f2f2; */
-}
 
 h1 {
   /* padding: 0px; */
@@ -194,7 +178,10 @@ li a:hover {
   }
   
 .homeContent{
-  padding: 10px;
+  display: flex;
+  width: 75%;
+  margin: auto;
+  text-align: center;
 }
 
 .homeChild {
@@ -207,10 +194,11 @@ li a:hover {
   background-color: #252525;
 	border-radius: 15px;
 	/* height: 450px; */
-  max-width: 500px;
+  /* max-width: 500px; */
+  /* width: 100%; */
 	position: relative;
 	overflow: hidden;
-  z-index: -1;
+  z-index: 1;
   
 }
 
@@ -233,7 +221,8 @@ li a:hover {
   z-index: -1;
 }
 
-.homeChild .btnU{
+.btnU{
+  margin: 30px;
   text-decoration: none;
   background-color: rgba(0,0,0,0.5);
   color: #ffffff;
@@ -242,10 +231,79 @@ li a:hover {
   padding: 15px 45px;
   font-weight: bold;
   transition: all .3s ease;
-  margin: 20px;
 }
 
-.homeChild .btnU:hover{
+.btnU:hover{
   transition: all .3s ease;
-    background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+#files {
+  width: 100%;
+  margin: auto;
+  padding: 10px;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 12px;
+}
+
+.upload {
+  width: 75%;
+  margin: auto;
+  /* border: 3px solid green; */
+  padding: 10px;
+  text-align: center;
+}
+
+.dragUpload {
+  width: 25%;
+  margin: auto;
+  text-align: center;
+  padding: 100px;
+  border-radius: 10px;
+  background-color: #a7a7a7;
+}
+
+.dragUpload:hover {
+  background-color: #949494;
+}
+
+.bothUpload {
+  display: flex;
+}
+
+
+
+.navbar {
+  padding: 0px 20px;
+  width: 95%;
+  display: inline-block;
+  /* align-items: center; */
+  background-color: #E5322D;
+
+  border-radius: 20px;
+  /* max-width: 600px; */
+  /* margin: 0 auto; */
+  /* border-bottom: 1px solid #f2f2f2; */
+}
+
+.links {
+  float: right;
+  /* margin-right: 10px; */
+  padding: 8px;
+}
+
+.heading {
+  float: left;
+}
+
+.mappingContent {
+  display: flex;
+  margin: auto;
+}
+
+.csvContent {
+  flex: 1;
+}
+.jsonContent {
+  flex: 1;
 }
