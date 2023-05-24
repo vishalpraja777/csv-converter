@@ -307,3 +307,34 @@ li a:hover {
 .jsonContent {
   flex: 1;
 }
+.dragDiv {
+  display: flex;
+  padding: 8px;
+}
+.borderCommon {
+  padding: 2px 4px;
+  /* border-style: solid; */
+  border-radius: 6px;
+  background-color: #575757ae;
+  color: #ffffff;
+}
+.mapValue {
+  margin-left: 20px;
+}
+.jsonItem1 {
+  padding: 8px; 
+}
+.jsonItem {
+  display: inline-flex;
+}
+.mapForm {
+  width: 25%;
+  margin: auto;
+}
+.profileContent {
+  width: 50%;
+  margin: auto;
+}
+.options {
+  padding: 8px;
+}

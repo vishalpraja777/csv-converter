@@ -42,6 +42,7 @@ const Signup = () => {
         if(data.status === 'error') {
             alert('User already exists')
         }
+        console.log("Response:" + response)
     }
     
 

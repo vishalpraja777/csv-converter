@@ -1,5 +1,13 @@
 {
     "fruit": "Apple",
     "size": "Large",
-    "color": "Red"
+    "color": "Red",
+    "weight": "Large",
+    "size1": "Large",
+    "size2": "Large",
+    "size3": "Large",
+    "size4": "Large",
+    "size5": "Large",
+    "size6": "Large"
+
 }

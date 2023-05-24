@@ -1,17 +1,23 @@
 import React from "react"
-import {useLocation, useNavigate, Link} from "react-router-dom";  
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import jwtDecode from "jwt-decode";
 
 const HomePage = () => {
 
     const userToken = localStorage.getItem('token')
     console.log("Token: " + userToken)
 
+    if (userToken) {
+        const userDecode = jwtDecode(userToken)
+        console.log(userDecode)
+    }
+
     const navigate = useNavigate();
 
     const handleUseMap = (e) => {
         e.preventDefault()
-        if(!userToken){
+        if (!userToken) {
             alert('Login To Use')
             return
         }
@@ -20,33 +26,33 @@ const HomePage = () => {
 
     const handleCreateMap = (e) => {
         e.preventDefault()
-        if(!userToken){
+        if (!userToken) {
             alert('Login To Use')
             return
         }
         navigate('/createmap')
     }
 
-    return ( 
+    return (
         <div className="homepage">
-            <Navbar/>
+            <Navbar />
             <div>
                 <h1>Homepage</h1>
                 <div className="homeContent">
                     <div className="homeChild">
                         <h2>Use existing mapping</h2>
-                        <button onClick={ handleUseMap } className='btnU'>Upload Files</button>
+                        <button onClick={handleUseMap} className='btnU'>Upload Files</button>
                         {/* <Link to='/usemap' className='btnU'>Upload Files</Link> */}
                     </div>
                     <div className="homeChild">
                         <h2>Create a mapping</h2>
-                        <button onClick={ handleCreateMap } className='btnU'>Upload Files</button>
+                        <button onClick={handleCreateMap} className='btnU'>Upload Files</button>
                         {/* <Link to='/createmap' className='btnU'>Upload Files</Link> */}
                     </div>
                 </div>
             </div>
         </div>
-     );
+    );
 }
- 
+
 export default HomePage;

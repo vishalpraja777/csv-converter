@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +10,28 @@ const UseMap = () => {
     const [fileUploaded, setFileUploaded] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [main, setMain] = useState(true)
+    const [mapData, setMapData] = useState()
+    const [optValue, setOptValue] = useState('')
+    const [optSelected, setOptSelected] = useState('')
+
+    useEffect(() => {
+        fetch(`http://localhost:1337/api/getmapdata/${localStorage.getItem('userid')}`)
+            .then((response) => {
+                const reader = response.body.getReader();
+                console.log(reader)
+                reader.read().then(({ done, value }) => {
+                    if (done) {
+                        console.log('end...')
+                        return;
+                    }
+                    const decoder = new TextDecoder();
+                    const strData = decoder.decode(value)
+                    const jsonData = JSON.parse(strData)
+                    console.log(jsonData)
+                    setMapData(jsonData)
+                });
+            })
+    }, [])
 
     const navigate = useNavigate();
 
@@ -91,17 +113,17 @@ const UseMap = () => {
     async function handleDownload(e) {
         e.preventDefault()
         const res = await fetch('http://localhost:1337/api/downloadjson')
-        .then(res => {
-            res.blob().then(blob => {
-               let url = window.URL.createObjectURL(blob);
-               let a = document.createElement('a');
-               a.href = url;
-               a.download = 'output.json';
-               a.click();
+            .then(res => {
+                res.blob().then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'output.json';
+                    a.click();
+                });
             });
-         });
 
-         alert('File Downloaded')
+        alert('File Downloaded')
 
         //  setFileUploaded(false)
         //  setMain(true)
@@ -115,25 +137,34 @@ const UseMap = () => {
             <h1>UseMap</h1>
             {main && <div className="upload">
                 <form onSubmit={uplaodFile}>
-                    <div
-                        className="dragUpload"
-                        onDragOver={handleDrageOverCsv}
-                        onDrop={handleDropCsv}
-                    >
-                        <p>Drag to upload CSV file</p>
-                        {<input type="file" name="file" id="files" onChange={(e) => { setCsvFile(e.target.files[0]); setCsvFileName(e.target.files[0].name) }} />}
-                        {csvFile && <p>File Name: {csvFileName}</p>}
-                        <br />
+                    <div className="fileOptions">
+                        <div
+                            className="dragUpload"
+                            onDragOver={handleDrageOverCsv}
+                            onDrop={handleDropCsv}
+                        >
+                            <p>Drag to upload CSV file</p>
+                            {<input type="file" name="file" id="files" onChange={(e) => { setCsvFile(e.target.files[0]); setCsvFileName(e.target.files[0].name) }} />}
+                            {csvFile && <p>File Name: {csvFileName}</p>}
+                            <br />
+                        </div>
+                        <div className="options">
+                            <select name="Mappings" id="mappings" value={optValue} onChange={(e) => { setOptValue(e.target.value);console.log(e.target.value) }}>
+                                {
+                                    mapData?.map(item => <option>{item.mappingname}</option>)
+                                }
+                            </select>
+                        </div>
                     </div>
                     <input type="submit" value="Upload" className="btnU" />
                 </form>
             </div>}
-            { isLoading && <div>Loading...</div> }
+            {isLoading && <div>Loading...</div>}
             {fileUploaded && <div>
                 <form onSubmit={handleDownload}>
                     <button type="submit" className="btnU">Download</button>
                 </form>
-                <button onClick={() => {setMain(true); setFileUploaded(false); setCsvFile('') }} className="btnU">Upload Another</button>
+                <button onClick={() => { setMain(true); setFileUploaded(false); setCsvFile('') }} className="btnU">Upload Another</button>
             </div>}
         </div>
     );
