@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import CreateMap from "./components/CreateMap";
 import UseMap from "./components/UseMap";
+import MainPage from "./pages/MainPage";
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Signup/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
-          <Route path="/" element={<HomePage/>}/>
+          <Route path="/" element={<MainPage/>}/>
+          <Route path="/homepage" element={<HomePage/>}/>
           <Route path="/about" element={<About/>}/>
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/createmap" element={<CreateMap/>}/>
