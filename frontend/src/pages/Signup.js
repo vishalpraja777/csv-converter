@@ -47,7 +47,7 @@ const Signup = () => {
     
 
     return ( 
-        <div className="login">
+        <div class= "ml-96 mt-28 mb-28 mr-96 flex">
             <div className="content">
             <h1 className="form-title">Register</h1>
             <form onSubmit={registerUser}>

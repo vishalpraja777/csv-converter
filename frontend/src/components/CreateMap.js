@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import Navbar from "./Navbar";
 import jwtDecode from "jwt-decode";
+import './About.css';
+import bg from './images/bg.webp'
 
 
 const CreateMap = () => {
@@ -226,7 +228,12 @@ const CreateMap = () => {
     return (
         <div>
             <Navbar />
-            <h1>CreateMap</h1>
+            <div class="w-full h-1/4 bg-no-repeat bg-cover bg-center bg-fixed" 
+             style={{ backgroundImage: `url(${bg})` }}>
+                <div class="h-full  w-full  pt-10 px-20">
+
+                <p class="text-6xl text-gray-900 font-serif pt-10 px-20"> CSV Conversion</p>
+                <p class="px-36 text-6xl text-gray-900 font-serif "> Tool</p></div>
             <div className="upload">
                 {!isUploaded &&
                     <div>
@@ -346,6 +353,7 @@ const CreateMap = () => {
                 </div>
                 }
             </div>
+        </div>
         </div>
     );
 }
