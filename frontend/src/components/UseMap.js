@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const UseMap = () => {
 
@@ -11,10 +11,16 @@ const UseMap = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [main, setMain] = useState(true)
     const [mapData, setMapData] = useState()
+
     const [optValue, setOptValue] = useState('')
     const [optSelected, setOptSelected] = useState('')
+    const [mappingIdSelected, setMappingIdSelected] = useState()
+    const [conversionName, setConversionName] = useState()
+
+    const [jsonFilePath, setJsonFilePath] = useState('')
 
     useEffect(() => {
+        console.log(localStorage.getItem('userid'))
         fetch(`http://localhost:1337/api/getmapdata/${localStorage.getItem('userid')}`)
             .then((response) => {
                 const reader = response.body.getReader();
@@ -33,7 +39,7 @@ const UseMap = () => {
             })
     }, [])
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     // const formData = new FormData();
 
@@ -52,6 +58,12 @@ const UseMap = () => {
     async function uplaodFile(event) {
         event.preventDefault()
 
+        console.log(conversionName)
+        if(!conversionName) {
+            alert('Enter conversion name')
+            return
+        }
+
         setIsLoading(true);
         setMain(false);
 
@@ -65,9 +77,16 @@ const UseMap = () => {
         // setCsvFile(document.querySelector("#files"));
         // console.log(csvFile)
 
-        if (!csvFileName.endsWith(".csv")) {
+        if (!csvFileName.endsWith(".csv") || !csvFileName) {
             alert("Please Upload a valid CSV file")
             window.location.reload()
+            return
+        }
+
+        if (!optSelected) {
+            alert('Select Mapping')
+            setIsLoading(false)
+            setMain(true)
             return
         }
 
@@ -76,6 +95,12 @@ const UseMap = () => {
             csvFormData.append('name', 'csv_file');
             // formData.append('file', files.files[0]);
             csvFormData.append('file', csvFile);
+            csvFormData.append('mappingName', optValue);
+            csvFormData.append('mappingId', mappingIdSelected);
+            csvFormData.append('conversionName', conversionName);
+            csvFormData.append('userId', localStorage.getItem('userid'));
+            csvFormData.append('mappingData', JSON.stringify(optSelected));
+
 
 
             console.log(...csvFormData)
@@ -93,14 +118,20 @@ const UseMap = () => {
 
             const csvData = await csvResponse.json()
 
-            console.log(csvData)
+            console.log(csvData.jsonFilename)
+            setJsonFilePath(csvData.jsonFilename)
+            console.log('OPT:' + optSelected)
+
+            setConversionName('')
 
             if (csvData.status === 'ok') {
                 alert('File Uploaded')
                 setIsLoading(false)
                 setFileUploaded(true)
             } else {
-                alert("File couldn't be uploaded")
+                alert("File couldn't be uploaded \nEnter a new Conversion name")
+                setIsLoading(false)
+                setMain(true)
             }
         }
 
@@ -112,13 +143,22 @@ const UseMap = () => {
 
     async function handleDownload(e) {
         e.preventDefault()
-        const res = await fetch('http://localhost:1337/api/downloadjson')
+        await fetch('http://localhost:1337/api/downloadjson', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                filename: jsonFilePath,
+                type: 'json'
+            })
+        })
             .then(res => {
                 res.blob().then(blob => {
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
                     a.href = url;
-                    a.download = 'output.json';
+                    a.download = 'output_' + jsonFilePath.slice(14);
                     a.click();
                 });
             });
@@ -129,6 +169,20 @@ const UseMap = () => {
         //  setMain(true)
         //  setCsvFile('')
 
+    }
+
+    const setMapValues = (e) => {
+        setOptValue(e.target.value)
+        console.log(e.target.value)
+        console.log(mapData)
+        mapData.map((item) => {
+            if (item.mappingname === e.target.value) {
+                setOptSelected(item.mappingdata)
+                setMappingIdSelected(item._id)
+                console.log(item._id)
+                console.log(item.mappingdata)
+            }
+        })
     }
 
     return (
@@ -149,12 +203,14 @@ const UseMap = () => {
                             <br />
                         </div>
                         <div className="options">
-                            <select name="Mappings" id="mappings" value={optValue} onChange={(e) => { setOptValue(e.target.value);console.log(e.target.value) }}>
+                            <select name="Mappings" id="mappings" value={optValue} onChange={setMapValues}>
+                                <option selected>--Select--</option>
                                 {
                                     mapData?.map(item => <option>{item.mappingname}</option>)
                                 }
                             </select>
                         </div>
+                        <input type="text" onChange={(e) => { setConversionName(e.target.value) }} placeholder="Conversion Name" className="input" style={{width:'25%',margin:'auto'}}/>
                     </div>
                     <input type="submit" value="Upload" className="btnU" />
                 </form>

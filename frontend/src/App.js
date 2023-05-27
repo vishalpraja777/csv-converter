@@ -9,6 +9,7 @@ import Dashboard from "./components/Dashboard";
 import CreateMap from "./components/CreateMap";
 import UseMap from "./components/UseMap";
 import MainPage from "./pages/MainPage";
+import ConvertedFiles from "./pages/ConvertedFiles";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/createmap" element={<CreateMap/>}/>
           <Route path="/usemap" element={<UseMap/>}/>
+          <Route path="/convertedfiles" element={<ConvertedFiles />}/>
         </Routes>
       </Router>
     </div>

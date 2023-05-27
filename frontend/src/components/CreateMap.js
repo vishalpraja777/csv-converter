@@ -102,6 +102,9 @@ const CreateMap = () => {
 
         console.log(mapping)
         console.log(userDecode.email)
+        console.log(localStorage.getItem('userid'))
+
+        const mappingName = mapName.toLowerCase()
 
 
         const response = await fetch('http://localhost:1337/api/createmapping', {
@@ -110,11 +113,12 @@ const CreateMap = () => {
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({
-                mapName: mapName,
-                mapping: mapping,
+                userId: localStorage.getItem('userid'),
+                mapName: mappingName,
+                mappingData: mapping,
                 csvHeader: csvHeaders,
                 jsonHeader: jsonHeaders,
-                id: localStorage.getItem('id')
+                mappingType: 'json'
             }),
         })
 
@@ -123,7 +127,7 @@ const CreateMap = () => {
         if (data.status === 'ok') {
             console.log(response.status)
             alert('Mapping Created')
-            navigate('/')
+            navigate('/homepage')
         }
         if (data.status === 'error') {
             alert('Map name already exists \nEnter a new map name')

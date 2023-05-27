@@ -11,3 +11,5 @@
 - Select format to convert
 - Conversion status
 - Download Link
+
+- Check map name before uploading

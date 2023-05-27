@@ -7,19 +7,21 @@ const Signup = () => {
     
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [name, setUsername] = useState('');
+    const [userName, setUsername] = useState('');
+    const [firstName, setFirstname] = useState('');
+    const [lastName, setLastname] = useState('');
 
     const navigate = useNavigate();
 
     async function registerUser(e) {
         e.preventDefault()
 
-        if(!email || !name){
+        if(!email || !userName){
             alert('Enter details')
             return
         }
 
-        if(email && name && password.length < 8){
+        if(email && userName && password.length < 8){
             alert('Password should be atleast 8 characters')
             return
         }
@@ -30,7 +32,7 @@ const Signup = () => {
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({
-                name, email, password
+                userName, firstName, lastName, email, password
             })
         })
 
@@ -54,6 +56,8 @@ const Signup = () => {
                 <div className="innerContent">
                 <div className="form-holder">
                     <input type="text" onChange={(e) =>{setUsername(e.target.value)}} placeholder="Username" className="input"/>
+                    <input type="text" onChange={(e) =>{setFirstname(e.target.value)}} placeholder="Firstname" className="input"/>
+                    <input type="text" onChange={(e) =>{setLastname(e.target.value)}} placeholder="Lastname" className="input"/>
                     <input type="email" onChange={(e) =>{setEmail(e.target.value)}} placeholder="Email" className="input"/>
                     <input type="password" onChange={(e) =>{setPassword(e.target.value)}} placeholder="Password" className="input"/>
                 </div>

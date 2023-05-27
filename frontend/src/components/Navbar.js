@@ -1,5 +1,5 @@
 import React from "react";
-import jwtDecode from "jwt-decode"
+// import jwtDecode from "jwt-decode"
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -17,6 +17,7 @@ const Navbar = () => {
             <div className="links">
                 <ul>
                     <li><Link to='/' className="link">Home</Link></li>
+                    <li><Link to='/convertedfiles' className="link">Converted Files</Link></li>
                     <li><Link to='/about' className="link">About</Link></li>
                     {userToken && <li><Link to='/profile' className="link">Profile</Link></li>}
                     {!userToken && <li><Link to='/login' className="link">Login</Link></li>}
