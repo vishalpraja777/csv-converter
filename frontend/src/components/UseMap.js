@@ -1,7 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import './About.css';
+import bg from './images/bg.webp'
+
 
 const UseMap = () => {
 
@@ -188,18 +191,24 @@ const UseMap = () => {
     return (
         <div>
             <Navbar />
-            <h1>UseMap</h1>
-            {main && <div className="upload">
+            <div class="w-full h-1/4 bg-no-repeat bg-cover bg-center bg-fixed" 
+             style={{ backgroundImage: `url(${bg})` }}>
+                <div class="h-full  w-full  pt-10 px-20">
+
+                <p class="text-6xl text-gray-900 font-serif pt-10 px-20"> CSV Conversion</p>
+                <p class="px-36 text-6xl text-gray-900 font-serif "> Tool</p>
+            {main && <div>
+
                 <form onSubmit={uplaodFile}>
-                    <div className="fileOptions">
-                        <div
-                            className="dragUpload"
+                    <div >
+                        <div class = "mt-32 ml-96 bg-black text-white  w-3/5 px-24 py-4 pt-6 "
+                            
                             onDragOver={handleDrageOverCsv}
                             onDrop={handleDropCsv}
                         >
-                            <p>Drag to upload CSV file</p>
+                            <h1 class = "font-serif text-3xl py-6">Drag or browse new csv file upload CSV file</h1>
                             {<input type="file" name="file" id="files" onChange={(e) => { setCsvFile(e.target.files[0]); setCsvFileName(e.target.files[0].name) }} />}
-                            {csvFile && <p>File Name: {csvFileName}</p>}
+                            {csvFile && <p class = "px-">File Name: {csvFileName}</p>}
                             <br />
                         </div>
                         <div className="options">
@@ -212,16 +221,18 @@ const UseMap = () => {
                         </div>
                         <input type="text" onChange={(e) => { setConversionName(e.target.value) }} placeholder="Conversion Name" className="input" style={{width:'25%',margin:'auto'}}/>
                     </div>
-                    <input type="submit" value="Upload" className="btnU" />
+                    <input type="submit" value="Upload" class= "bg-black text-lg font-semibold  text-white px-4 py-2 mt-4 rounded-2xl justify-end ml-96 mb-1"  />
                 </form>
             </div>}
             {isLoading && <div>Loading...</div>}
             {fileUploaded && <div>
                 <form onSubmit={handleDownload}>
-                    <button type="submit" className="btnU">Download</button>
+                    <button class= "bg-black text-lg font-semibold  text-white px-4 py-2 rounded-2xl justify-end ml-96" type="submit" >Download</button>
                 </form>
-                <button onClick={() => { setMain(true); setFileUploaded(false); setCsvFile('') }} className="btnU">Upload Another</button>
+                <button class= "bg-black text-lg font-semibold  text-white px-4 py-3 rounded-2xl justify-end ml-96" onClick={() => { setMain(true); setFileUploaded(false); setCsvFile('') }} >Upload Another</button>
             </div>}
+        </div>
+        </div>
         </div>
     );
 }
