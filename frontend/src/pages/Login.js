@@ -26,6 +26,8 @@ const Login = () => {
     const data = await response.json()
     if(data.user) {
         localStorage.setItem('token', data.user);
+        localStorage.setItem('userid', data.id);
+        console.log(localStorage.getItem('userid'))
         alert('Login Successful')
         // window.location.href = '/quote'
         navigate('/')
@@ -36,7 +38,7 @@ const Login = () => {
 
 
     return ( 
-        <div className="login">
+        <div class= "ml-96 mt-28 mb-28 mr-96 flex">
             <div className="content">
             <h1 className="form-title">Login</h1>
             <form onSubmit={loginUser}>

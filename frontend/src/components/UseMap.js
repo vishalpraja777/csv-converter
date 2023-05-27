@@ -1,7 +1,10 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
+import './About.css';
+import bg from './images/bg.webp'
+
 
 const UseMap = () => {
 
@@ -10,6 +13,28 @@ const UseMap = () => {
     const [fileUploaded, setFileUploaded] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [main, setMain] = useState(true)
+    const [mapData, setMapData] = useState()
+    const [optValue, setOptValue] = useState('')
+    const [optSelected, setOptSelected] = useState('')
+
+    useEffect(() => {
+        fetch(`http://localhost:1337/api/getmapdata/${localStorage.getItem('userid')}`)
+            .then((response) => {
+                const reader = response.body.getReader();
+                console.log(reader)
+                reader.read().then(({ done, value }) => {
+                    if (done) {
+                        console.log('end...')
+                        return;
+                    }
+                    const decoder = new TextDecoder();
+                    const strData = decoder.decode(value)
+                    const jsonData = JSON.parse(strData)
+                    console.log(jsonData)
+                    setMapData(jsonData)
+                });
+            })
+    }, [])
 
     const navigate = useNavigate();
 
@@ -91,17 +116,17 @@ const UseMap = () => {
     async function handleDownload(e) {
         e.preventDefault()
         const res = await fetch('http://localhost:1337/api/downloadjson')
-        .then(res => {
-            res.blob().then(blob => {
-               let url = window.URL.createObjectURL(blob);
-               let a = document.createElement('a');
-               a.href = url;
-               a.download = 'output.json';
-               a.click();
+            .then(res => {
+                res.blob().then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'output.json';
+                    a.click();
+                });
             });
-         });
 
-         alert('File Downloaded')
+        alert('File Downloaded')
 
         //  setFileUploaded(false)
         //  setMain(true)
@@ -112,29 +137,46 @@ const UseMap = () => {
     return (
         <div>
             <Navbar />
-            <h1>UseMap</h1>
-            {main && <div className="upload">
+            <div class="w-full h-1/4 bg-no-repeat bg-cover bg-center bg-fixed" 
+             style={{ backgroundImage: `url(${bg})` }}>
+                <div class="h-full  w-full  pt-10 px-20">
+
+                <p class="text-6xl text-gray-900 font-serif pt-10 px-20"> CSV Conversion</p>
+                <p class="px-36 text-6xl text-gray-900 font-serif "> Tool</p>
+            {main && <div>
+
                 <form onSubmit={uplaodFile}>
-                    <div
-                        className="dragUpload"
-                        onDragOver={handleDrageOverCsv}
-                        onDrop={handleDropCsv}
-                    >
-                        <p>Drag to upload CSV file</p>
-                        {<input type="file" name="file" id="files" onChange={(e) => { setCsvFile(e.target.files[0]); setCsvFileName(e.target.files[0].name) }} />}
-                        {csvFile && <p>File Name: {csvFileName}</p>}
-                        <br />
+                    <div >
+                        <div class = "mt-32 ml-96 bg-black text-white  w-3/5 px-24 py-4 pt-6 "
+                            
+                            onDragOver={handleDrageOverCsv}
+                            onDrop={handleDropCsv}
+                        >
+                            <h1 class = "font-serif text-3xl py-6">Drag or browse new csv file upload CSV file</h1>
+                            {<input type="file" name="file" id="files" onChange={(e) => { setCsvFile(e.target.files[0]); setCsvFileName(e.target.files[0].name) }} />}
+                            {csvFile && <p class = "px-">File Name: {csvFileName}</p>}
+                            <br />
+                        </div>
+                        <div class = " ml-96 bg-black text-white  w-3/5 px-28 py-8 ">
+                            <select name="Mappings" id="mappings" value={optValue} onChange={(e) => { setOptValue(e.target.value);console.log(e.target.value) }}>
+                                {
+                                    mapData?.map(item => <option>{item.mappingname}</option>)
+                                }
+                            </select>
+                        </div>
                     </div>
-                    <input type="submit" value="Upload" className="btnU" />
+                    <input type="submit" value="Upload" class= "bg-black text-lg font-semibold  text-white px-4 py-2 mt-4 rounded-2xl justify-end ml-96 mb-1"  />
                 </form>
             </div>}
-            { isLoading && <div>Loading...</div> }
+            {isLoading && <div>Loading...</div>}
             {fileUploaded && <div>
                 <form onSubmit={handleDownload}>
-                    <button type="submit" className="btnU">Download</button>
+                    <button class= "bg-black text-lg font-semibold  text-white px-4 py-2 rounded-2xl justify-end ml-96" type="submit" >Download</button>
                 </form>
-                <button onClick={() => {setMain(true); setFileUploaded(false); setCsvFile('') }} className="btnU">Upload Another</button>
+                <button class= "bg-black text-lg font-semibold  text-white px-4 py-3 rounded-2xl justify-end ml-96" onClick={() => { setMain(true); setFileUploaded(false); setCsvFile('') }} >Upload Another</button>
             </div>}
+        </div>
+        </div>
         </div>
     );
 }

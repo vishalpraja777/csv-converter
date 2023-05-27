@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/userModels')
+const Data = require('./models/mapDataModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const multer = require('multer')
@@ -111,7 +112,7 @@ app.post('/api/uploadcsv', uploadCsv.array('file'), async (req, res) => {
     // convertToJson('csv_uploads/' + req.files[0].originalname)
     // convertToJson('csv_uploads/' + csvFilename)
 
-    return res.json({ status: 'ok', csvHeaders})
+    return res.json({ status: 'ok', csvHeaders })
 })
 
 app.post('/api/uploadjson', uploadJson.array('file'), async (req, res) => {
@@ -121,7 +122,7 @@ app.post('/api/uploadjson', uploadJson.array('file'), async (req, res) => {
     const jsonData = JSON.parse(fs.readFileSync(req.files[0].path, 'utf-8'));
     const jsonHeaders = Object.keys(jsonData);
 
-    return res.json({ status: 'ok', jsonHeaders})
+    return res.json({ status: 'ok', jsonHeaders })
 })
 
 app.post('/api/uploadcsvtoconvert', uploadCsv.array('file'), async (req, res) => {
@@ -142,6 +143,38 @@ app.get('/api/downloadjson', async (req, res) => {
     res.download("jsonOutputs/output.json");
 })
 
+app.post('/api/createmapping', async (req, res) => {
+    console.log(req.body)
+
+    try {
+        await Data.create({
+            mappingname: req.body.mapName.toLowerCase(),
+            // email: req.body.email,
+            userid: req.body.id,
+            csvheaders: req.body.csvHeader,
+            jsonheaders: req.body.jsonHeader,
+            mapping: req.body.mapping,
+        })
+        return res.json({ status: 'ok' })
+    } catch (err) {
+        return res.json({ status: 'error', error: 'Duplicate Mapping' })
+    }
+
+})
+
+app.get('/api/getmapdata/:userid', async (req, res) => {
+    console.log(req.params.userid)
+    const data = req.params.userid
+    Data.find({$where: function(data) { 
+        return ((this.userid)  != data)
+    } } )
+    .then((result) => {
+        res.send(result);
+    }).catch((err) => {
+        console.log(err)
+    });
+})
+
 app.post('/api/register', async (req, res) => {
 
     console.log(req.body);
@@ -153,9 +186,9 @@ app.post('/api/register', async (req, res) => {
             email: req.body.email,
             password: newPassword,
         })
-        res.json({ status: 'ok' })
+        return res.json({ status: 'ok' })
     } catch (err) {
-        res.json({ status: 'error', error: 'Duplicate email' })
+        return res.json({ status: 'error', error: 'Duplicate email' })
     }
 })
 
@@ -181,12 +214,27 @@ app.post('/api/login', async (req, res) => {
             'secret123'
         )
 
-        return res.json({ status: 'ok', user: token })
+        return res.json({ status: 'ok', user: token, id: user._id })
     } else {
         return res.json({ status: 'error', user: false })
 
     }
 })
+
+// const UserModel = mongoose.model('User', UserSchema);
+
+// Find a user by their email
+User.findOne({ email: 'vp@gmail.com' })
+    .then(user => {
+        if (user) {
+            console.log('User ID:', user._id.toString());
+        } else {
+            console.log('User not found');
+        }
+    })
+    .catch(error => {
+        console.error('Error finding user:', error);
+    });
 
 app.listen(1337, () => {
     console.log('Server started on 1337')

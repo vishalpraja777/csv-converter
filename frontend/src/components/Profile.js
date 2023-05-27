@@ -1,5 +1,4 @@
-import React, { useState } from "react"
-import {useLocation, useNavigate} from "react-router-dom";  
+import {useNavigate} from "react-router-dom";  
 import Navbar from "./Navbar";
 import jwtDecode from "jwt-decode";
 
@@ -11,7 +10,7 @@ const Profile = () => {
 
         const userDecode = jwtDecode(userToken)
         // setUser(userDecode)
-        // console.log(userDecode)
+        console.log(userDecode)
 
     const navigate = useNavigate();
 
@@ -25,11 +24,11 @@ const Profile = () => {
     return ( 
         <div className="profile">
             <Navbar/>
-            <div>
+            <div className="profileContent">
                 <h1>Profile</h1>
                 <p>Name: {userDecode.name}</p>
                 <p>Email: {userDecode.email}</p>
-                <button onClick={logout}>Logout</button>
+                <button onClick={logout} className="btn" style={{width:"25%"}}>Logout</button>
             </div>
         </div>
      );

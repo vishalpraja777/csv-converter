@@ -5,12 +5,10 @@ const User = new mongoose.Schema(
         name: { type: String, require: true },
         email: { type: String, require: true, unique: true },
         password: { type: String, require: true },
-        mappingJSON: { type: String},
-        mappingCSV: { type: String}
     },
-    { collection: 'userdata'} 
+    { collection: 'signUpData'} 
 )
 
-const model = mongoose.model('Userdata', User)
+const model = mongoose.model('signUpData', User)
 
 module.exports = model
