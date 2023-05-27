@@ -145,6 +145,7 @@ const UseMap = () => {
     }
 
     async function handleDownload(e) {
+        console.log(jsonFilePath)
         e.preventDefault()
         await fetch('http://localhost:1337/api/downloadjson', {
             method: 'POST',

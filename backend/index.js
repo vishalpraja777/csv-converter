@@ -61,54 +61,100 @@ let jsonFilename = '';
 //     }
 // });
 
+// const convertToJson = (csvFilePath, mappingData) => {
+//     // csvtojson()
+//     //     .fromFile(filepath)
+//     //     .then((json) => {
+//     //         // console.log(json)
+
+//     //         fs.writeFileSync('jsonOutputs/output.json', JSON.stringify(json), "utf-8", (err) => {
+//     //             if (err) console.log(err)
+//     //         });
+//     //     })
+
+//     jsonFilename = csvFilename.slice(0, -4) + '.json'
+//     const jsonFilePath = 'jsonOutputs/' + jsonFilename
+//     const jsonArray = [];
+
+//     fs.createReadStream(csvFilePath)
+//         .pipe(csv())
+//         .on('data', (data) => {
+//             const jsonObject = {};
+//             // console.log(data)
+
+
+//             // Map the CSV headers to JSON headers
+//             for (const jsonHeader of Object.keys(mappingData)) {
+//                 const csvHeader = mappingData[jsonHeader];
+//                 jsonObject[jsonHeader] = data[csvHeader];
+//                 // console.log("\nData:" + jsonHeader)
+//             }
+//             // console.log('jsonObject')
+//             // console.log(jsonObject)
+//             jsonArray.push(jsonObject);
+//             // console.log('jsonArray')
+//             // console.log(jsonArray)
+//         })
+//         .on('end', () => {
+//             const jsonData = JSON.stringify(jsonArray, null, 2);
+//             // console.log(jsonData)
+
+//             fs.writeFile(jsonFilePath, jsonData, (err) => {
+//                 if (err) {
+//                     console.error('Error writing JSON file:', err);
+//                 } else {
+//                     console.log('JSON file successfully created:', jsonFilePath);
+//                 }
+//             });
+//         });
+// }
+
 const convertToJson = (csvFilePath, mappingData) => {
-    // csvtojson()
-    //     .fromFile(filepath)
-    //     .then((json) => {
-    //         // console.log(json)
-
-    //         fs.writeFileSync('jsonOutputs/output.json', JSON.stringify(json), "utf-8", (err) => {
-    //             if (err) console.log(err)
-    //         });
-    //     })
-
-    jsonFilename = csvFilename.slice(0, -4) + '.json'
-    const jsonFilePath = 'jsonOutputs/' + jsonFilename
+    const jsonFilename = csvFilename.slice(0, -4) + ".json";
+    console.log('filename1')
+    console.log(jsonFilename)
+    const jsonFilePath = "jsonOutputs/" + jsonFilename;
     const jsonArray = [];
-
+  
     fs.createReadStream(csvFilePath)
-        .pipe(csv())
-        .on('data', (data) => {
-            const jsonObject = {};
-            // console.log(data)
-
-
-            // Map the CSV headers to JSON headers
-            for (const csvHeader of Object.keys(mappingData)) {
-                const jsonHeader = mappingData[csvHeader];
-                jsonObject[jsonHeader] = data[csvHeader];
-                // console.log("\nData:" + jsonHeader)
+      .pipe(csv())
+      .on("data", (data) => {
+        const jsonObject = {};
+  
+        // Map the CSV headers to JSON headers
+        for (const jsonHeaderPath of Object.keys(mappingData)) {
+          const csvHeader = mappingData[jsonHeaderPath];
+          const jsonHeaderArr = jsonHeaderPath.split(".");
+  
+          let currentObject = jsonObject;
+          for (let i = 0; i < jsonHeaderArr.length - 1; i++) {
+            const jsonKey = jsonHeaderArr[i];
+            if (!currentObject[jsonKey]) {
+              currentObject[jsonKey] = {};
             }
-            // console.log('jsonObject')
-            // console.log(jsonObject)
-            jsonArray.push(jsonObject);
-            // console.log('jsonArray')
-            // console.log(jsonArray)
-        })
-        .on('end', () => {
-            const jsonData = JSON.stringify(jsonArray, null, 2);
-            // console.log(jsonData)
-
-            fs.writeFile(jsonFilePath, jsonData, (err) => {
-                if (err) {
-                    console.error('Error writing JSON file:', err);
-                } else {
-                    console.log('JSON file successfully created:', jsonFilePath);
-                }
-            });
+            currentObject = currentObject[jsonKey];
+          }
+  
+          const lastJsonKey = jsonHeaderArr[jsonHeaderArr.length - 1];
+          currentObject[lastJsonKey] = data[csvHeader];
+        }
+  
+        jsonArray.push(jsonObject);
+      })
+      .on("end", () => {
+        const jsonData = JSON.stringify(jsonArray, null, 2);
+  
+        fs.writeFile(jsonFilePath, jsonData, (err) => {
+          if (err) {
+            console.error("Error writing JSON file:", err);
+          } else {
+            console.log("JSON file successfully created:", jsonFilePath);
+          }
         });
-}
-
+      });
+      return jsonFilename
+  };
+  
 
 const uploadCsv = multer({
     storage: multer.diskStorage({
@@ -162,7 +208,10 @@ app.post('/api/uploadcsvtoconvert', uploadCsvToConvert.array('file'), async (req
     // convertToJson('csv_uploads/' + req.files[0].originalname)
     mappingDataJson = JSON.parse(req.body.mappingData)
     console.log(mappingDataJson)
-    convertToJson('csv_convert_uploads/' + csvFilename, mappingDataJson)
+    jsonFilename = convertToJson('csv_convert_uploads/' + csvFilename, mappingDataJson)
+
+    console.log('jsonFilename')
+    console.log(jsonFilename)
 
     try {
         await Files.create({
@@ -228,6 +277,39 @@ app.post('/api/uploadjson', uploadJson.array('file'), async (req, res) => {
     return res.json({ status: 'ok', jsonHeaders })
 })
 
+app.post('/api/uploadnestedjson', uploadJson.array('file'), async (req, res) => {
+    try {
+      const jsonData = JSON.parse(fs.readFileSync(req.files[0].path, 'utf-8'));
+      const jsonHeaders = getJsonHeaders(jsonData);
+  
+      return res.json({ status: 'ok', jsonHeaders });
+    } catch (error) {
+      console.error('Error parsing JSON file:', error);
+      return res.json({ status: 'error' });
+    }
+  });
+  
+  // Recursive function to retrieve nested JSON headers
+  function getJsonHeaders(data, prefix = '') {
+    let headers = [];
+  
+    for (let key in data) {
+      if (data.hasOwnProperty(key)) {
+        const nestedKey = prefix ? `${prefix}.${key}` : key;
+  
+        if (typeof data[key] === 'object' && !Array.isArray(data[key])) {
+          const nestedHeaders = getJsonHeaders(data[key], nestedKey);
+          headers = headers.concat(nestedHeaders);
+        } else {
+          headers.push(nestedKey);
+        }
+      }
+    }
+  
+    return headers;
+  }
+  
+
 // app.post('/api/uploadMapping', async (req, res) => {
 //     console.log(req.body)
 // })
@@ -235,6 +317,7 @@ app.post('/api/uploadjson', uploadJson.array('file'), async (req, res) => {
 app.post('/api/downloadjson', async (req, res) => {
     // res.download("jsonOutputs/output.json");
     const filepath = req.body.filename
+    console.log(req.body)
     const type = req.body.type
 
     try {
