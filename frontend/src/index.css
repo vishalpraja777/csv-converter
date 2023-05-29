@@ -186,11 +186,33 @@ li a:hover {
   z-index: -1;
 }
 
+.btnDiv {
+  display: flex;
+}
+
+.btnDiv .btnUD {
+  background-color: rgba(0,0,0,0.5);
+  margin: 8px;
+  text-decoration: none;
+  background-color: rgba(0,0,0,0.5);
+  color:  #ffffff;
+  border:0;
+  border-radius: 15px;
+  padding: 15px 10px;
+  font-weight: bold;
+  transition: all .3s ease;
+}
+
+.btnDiv .btnUD:hover{
+  transition: all .3s ease;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
 .btnU{
   margin: 30px;
   text-decoration: none;
   background-color: rgba(0,0,0,0.5);
-  color: #ffffff;
+  color:  #ffffff;
   border:0;
   border-radius: 15px;
   padding: 15px 45px;

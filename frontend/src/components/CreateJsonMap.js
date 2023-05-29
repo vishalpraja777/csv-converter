@@ -109,7 +109,7 @@ const CreateMap = () => {
         const mappingName = mapName.toLowerCase()
 
 
-        const response = await fetch('http://localhost:1337/api/createmapping', {
+        const response = await fetch('http://localhost:1337/api/createjsonmapping', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -182,7 +182,7 @@ const CreateMap = () => {
             const csvData = await csvResponse.json()
             const jsonData = await jsonResponse.json()
 
-            console.log(jsonData.jsonHeaders)
+            console.log(jsonResponse.json())
             console.log(jsonData.jsonHeaders)
 
             setCsvHeaders(csvData.csvHeaders);
@@ -207,89 +207,89 @@ const CreateMap = () => {
     return (
         <div>
             <Navbar />
-            <div class="w-full h-1/4 bg-no-repeat bg-cover bg-center bg-fixed" 
-             style={{ backgroundImage: `url(${bg})` }}>
+            <div class="w-full h-1/4 bg-no-repeat bg-cover bg-center bg-fixed"
+                style={{ backgroundImage: `url(${bg})` }}>
                 <div class="h-full  w-full  pt-10 px-20">
 
-                <p class="text-6xl text-gray-900 font-serif pt-10 px-20"> CSV Conversion</p>
-                <p class="px-36 text-6xl text-gray-900 font-serif "> Tool</p></div>
-            <div className="upload">
-                {!isUploaded &&
-                    <div>
-                        <form onSubmit={uplaodFile}>
-                            <div className="bothUpload">
-                                <div
-                                    className="dragUpload"
-                                    onDragOver={handleDrageOverCsv}
-                                    onDrop={handleDropCsv}
-                                >
-                                    <p>Drag to upload sample CSV file</p>
-                                    {!csvFile && <input type="file" name="file" id="files" onChange={(e) => { setCsvFile(e.target.files[0]); setCsvFileName(e.target.files[0].name) }} />}
-                                    {csvFile && <p>File Name: {csvFileName}</p>}
-                                    <br />
-                                </div>
-                                <div
-                                    className="dragUpload"
-                                    onDragOver={handleDrageOverJson}
-                                    onDrop={handleDropJson}
-                                >
-                                    <p>Drag to upload sample JSON file</p>
-                                    {!jsonFile && <input type="file" name="file" id="files" onChange={(e) => { setJsonFile(e.target.files[0]); setJsonFileName(e.target.files[0].name) }} />}
-                                    {jsonFile && <p>File Name: {jsonFileName}</p>}
-                                    <br />
-                                </div>
-                            </div>
-                            <input type="submit" value="Upload" className="btnU" />
-                        </form>
-                    </div>
-                }
-                {isUploaded && <div>
-                    <button className="btnU" onClick={handleNew}>Upload New Files</button>
-
-                    <div className="mappingContent">
-                        {<div className="csvContent">
-                            <h1>JSON Headers</h1>
-                            {
-                                jsonHeaders.map((header) => (
-                                    <div>
-                                        <div
-                                            className="dragDiv"
-                                            onDragOver={handleDragOverMap}
-                                            onDrop={(e) => { handleDropMap(e, header) }}
-                                        >
-                                            <div className="mapKey borderCommon">{header}</div>
-                                            <div style={{ marginLeft: "20px" }}>=&gt;</div>
-                                            <div className="mapValue borderCommon">{mappings.get(header)}</div>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>}
-
-                        {<div className="jsonContent">
-                            <h1>CSV Headers</h1>
-                            {
-                                csvHeaders.map((header) => (
+                    <p class="text-6xl text-gray-900 font-serif pt-10 px-20"> CSV Conversion</p>
+                    <p class="px-36 text-6xl text-gray-900 font-serif "> Tool</p></div>
+                <div className="upload">
+                    {!isUploaded &&
+                        <div>
+                            <form onSubmit={uplaodFile}>
+                                <div className="bothUpload">
                                     <div
-                                        className="jsonItem1"
-                                        draggable
-                                        onDragStart={(e) => { handleOnDragStart(e, header) }}
+                                        className="dragUpload"
+                                        onDragOver={handleDrageOverCsv}
+                                        onDrop={handleDropCsv}
                                     >
-                                        <div className="jsonItem borderCommon">{header}</div>
+                                        <p>Drag to upload sample CSV file</p>
+                                        {!csvFile && <input type="file" name="file" id="files" onChange={(e) => { setCsvFile(e.target.files[0]); setCsvFileName(e.target.files[0].name) }} />}
+                                        {csvFile && <p>File Name: {csvFileName}</p>}
                                         <br />
                                     </div>
-                                ))
-                            }
-                        </div>}
+                                    <div
+                                        className="dragUpload"
+                                        onDragOver={handleDrageOverJson}
+                                        onDrop={handleDropJson}
+                                    >
+                                        <p>Drag to upload sample JSON file</p>
+                                        {!jsonFile && <input type="file" name="file" id="files" onChange={(e) => { setJsonFile(e.target.files[0]); setJsonFileName(e.target.files[0].name) }} />}
+                                        {jsonFile && <p>File Name: {jsonFileName}</p>}
+                                        <br />
+                                    </div>
+                                </div>
+                                <input type="submit" value="Upload" className="btnU" />
+                            </form>
+                        </div>
+                    }
+                    {isUploaded && <div>
+                        <button className="btnU" onClick={handleNew}>Upload New Files</button>
+
+                        <div className="mappingContent">
+                            {<div className="csvContent">
+                                <h1>JSON Headers</h1>
+                                {
+                                    jsonHeaders.map((header) => (
+                                        <div>
+                                            <div
+                                                className="dragDiv"
+                                                onDragOver={handleDragOverMap}
+                                                onDrop={(e) => { handleDropMap(e, header) }}
+                                            >
+                                                <div className="mapKey borderCommon">{header}</div>
+                                                <div style={{ marginLeft: "20px" }}>=&gt;</div>
+                                                <div className="mapValue borderCommon">{mappings.get(header)}</div>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>}
+
+                            {<div className="jsonContent">
+                                <h1>CSV Headers</h1>
+                                {
+                                    csvHeaders.map((header) => (
+                                        <div
+                                            className="jsonItem1"
+                                            draggable
+                                            onDragStart={(e) => { handleOnDragStart(e, header) }}
+                                        >
+                                            <div className="jsonItem borderCommon">{header}</div>
+                                            <br />
+                                        </div>
+                                    ))
+                                }
+                            </div>}
+                        </div>
+                        <form onSubmit={createMapping} className="mapForm">
+                            <input type="text" onChange={(e) => { setMapName(e.target.value) }} placeholder="Map Name" className="input" />
+                            <input type="submit" value="Create Mapping" className="btn" />
+                        </form>
                     </div>
-                    <form onSubmit={createMapping} className="mapForm">
-                        <input type="text" onChange={(e) => { setMapName(e.target.value) }} placeholder="Map Name" className="input" />
-                        <input type="submit" value="Create Mapping" className="btn" />
-                    </form>
+                    }
                 </div>
-                }
             </div>
-        </div>
         </div>
     );
 }

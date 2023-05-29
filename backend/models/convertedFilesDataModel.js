@@ -7,8 +7,10 @@ const Files = new mongoose.Schema(
         userid: { type: String, require: true},
         mappingid: { type: String },
         mappingname: { type: String},
+        mappingtype: { type: String},
         csvfile: { type: String },
         jsonfile: { type: String},
+        xmlfile: { type: String},
     },
     { collection: 'convertedFiles'} 
 );
