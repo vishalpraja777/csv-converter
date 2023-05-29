@@ -21,6 +21,7 @@ const Navbar = () => {
                     <button class="cursor-pointer hover:underline  active:text-slate-600"><Link to='/about' className="link">About</Link></button>
                     <button class="cursor-pointer hover:underline  active:text-slate-600"><Link to='/contact' className="link">Contact Us</Link></button>
                     <button class="cursor-pointer hover:underline  active:text-slate-600"><Link to='/convertedfiles' className="link">Converted Files</Link></button>
+                    <button class="cursor-pointer hover:underline  active:text-slate-600"><Link to='/editmapping' className="link">Edit Mapping</Link></button>
                     {userToken && <button class="cursor-pointer hover:underline  active:text-slate-600"><Link to='/profile' className="link">Profile</Link></button>}
                     {!userToken && <button class="cursor-pointer hover:underline  active:text-slate-600"><Link to='/login' className="link">Login</Link></button>}
             </div>

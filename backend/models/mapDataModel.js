@@ -8,7 +8,7 @@ const Data = new mongoose.Schema(
         mappingname: { type: String, require: true},
         mappingtype: { type: String },
         csvheaders: { type: Array },
-        jsonheaders: { type: Array},
+        jsonxmlheaders: { type: Array},
         mappingdata: { type: Object},
     },
     { collection: 'mappingData'} 
