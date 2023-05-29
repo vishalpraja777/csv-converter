@@ -90,14 +90,16 @@ const ConvertedFiles = () => {
                     <tr>
                         <th>Conversion Name</th>
                         <th>Mapping Name</th>
+                        <th>Mapping Type</th>
                         <th>CSV File</th>
-                        <th>JSON File</th>
+                        <th>JSON/XML File</th>
                     </tr>
                     {
                         conversionData?.map((item) =>
                             <tr>
                                 <td>{item.conversionname}</td>
                                 <td>{item.mappingname}</td>
+                                <td>{item.mappingtype.toUpperCase()}</td>
                                 <td>{item.csvfile.slice(14)} <button onClick={(e) => handleDownload(e, item.csvfile, 'csv')}>Download</button></td>
                                 {item.jsonfile && <td>{item.jsonfile.slice(14)} <button onClick={(e) => handleDownload(e, item.jsonfile, 'json')}>Download</button></td> }
                                 {item.xmlfile && <td>{item.xmlfile.slice(14)} <button onClick={(e) => handleDownload(e, item.xmlfile, 'xml')}>Download</button></td> }

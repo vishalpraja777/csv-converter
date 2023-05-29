@@ -24,13 +24,17 @@ const UseMap = () => {
     const [xmlFilePath, setXmlFilePath] = useState('')
 
     const [conversionData, setConversionData] = useState()
+    const [csvHeaders, setCsvHeaders] = useState()
+    const [csvHeadersItem, setCsvHeadersItem] = useState()
+    const [item, setItem] = useState()
+    const [uploadClick, setUploadClick] = useState(false)
 
     useEffect(() => {
         console.log(localStorage.getItem('userid'))
         fetch(`http://localhost:1337/api/getmapdata/${localStorage.getItem('userid')}`)
             .then((response) => {
                 const reader = response.body.getReader();
-                console.log(reader)
+                // console.log(reader)
                 reader.read().then(({ done, value }) => {
                     if (done) {
                         console.log('end...')
@@ -39,15 +43,15 @@ const UseMap = () => {
                     const decoder = new TextDecoder();
                     const strData = decoder.decode(value)
                     const jsonData = JSON.parse(strData)
-                    console.log(jsonData)
+                    // console.log(jsonData)
                     setMapData(jsonData)
                 });
             })
 
-            fetch(`http://localhost:1337/api/getconversiondata/${localStorage.getItem('userid')}`)
+        fetch(`http://localhost:1337/api/getconversiondata/${localStorage.getItem('userid')}`)
             .then((response) => {
                 const reader = response.body.getReader();
-                console.log(reader)
+                // console.log(reader)
                 reader.read().then(({ done, value }) => {
                     if (done) {
                         console.log('end...')
@@ -56,7 +60,7 @@ const UseMap = () => {
                     const decoder = new TextDecoder();
                     const strData = decoder.decode(value)
                     const jsonData = JSON.parse(strData)
-                    console.log(jsonData)
+                    // console.log(jsonData)
                     setConversionData(jsonData)
                 });
             })
@@ -81,13 +85,21 @@ const UseMap = () => {
     async function uplaodFile(event) {
         event.preventDefault()
 
-        console.log(conversionName)
+        
+
+        if(!uploadClick) {
+            alert('Click On Upload')
+            return
+        }
+        setUploadClick(false)
+
+        // console.log(conversionName)
         if (!conversionName) {
             alert('Enter conversion name')
             return
         }
 
-        
+
 
         // const files = document.getElementById("files");
 
@@ -112,10 +124,19 @@ const UseMap = () => {
             return
         }
 
-        for(let item in conversionData) {
-            console.log(conversionName + conversionData[item].conversionname)
-            if(conversionName.toLowerCase() === conversionData[item].conversionname) {
+        for (let item in conversionData) {
+            // console.log(conversionName + conversionData[item].conversionname)
+            if (conversionName.toLowerCase() === conversionData[item].conversionname) {
                 alert('Conversion name already present')
+                return
+            }
+        }
+
+        for (let i in csvHeadersItem) {
+            if (csvHeadersItem[i] !== csvHeaders[i]) {
+                console.log(csvHeadersItem[i])
+                console.log(csvHeaders[i])
+                alert("Headers not matching upload new file")
                 return
             }
         }
@@ -169,6 +190,7 @@ const UseMap = () => {
                 alert('File Uploaded')
                 setIsLoading(false)
                 setFileUploaded(true)
+                setUploadClick(false)
             } else {
                 alert("File couldn't be uploaded")
                 setIsLoading(false)
@@ -187,10 +209,10 @@ const UseMap = () => {
         e.preventDefault()
         let filePath = ''
         let type = ''
-        if(mappingType === 'json') {
+        if (mappingType === 'json') {
             filePath = jsonFilePath
             type = 'json'
-        } else if(mappingType === 'xml') {
+        } else if (mappingType === 'xml') {
             filePath = xmlFilePath
             type = 'xml'
         }
@@ -227,15 +249,42 @@ const UseMap = () => {
         setOptValue(e.target.value)
         console.log(e.target.value)
         console.log(mapData)
+
         mapData.map((item) => {
             if (item.mappingname === e.target.value) {
                 setOptSelected(item.mappingdata)
                 setMappingIdSelected(item._id)
+                setItem(item)
+                setCsvHeadersItem(item.csvheaders)
                 setMappingType(item.mappingtype)
-                console.log(item._id)
+                console.log(item.csvheaders)
                 console.log(item.mappingdata)
             }
         })
+    }
+
+    const handleUpload = async (e) => {
+        e.preventDefault();
+
+        const csvFormData = new FormData();
+        if (csvFile) {
+            csvFormData.append('name', 'csv_file');
+            csvFormData.append('file', csvFile);
+
+
+            console.log(...csvFormData)
+
+            const csvResponse = await fetch('http://localhost:1337/api/uploadcsv', {
+                method: 'POST',
+                body: csvFormData
+            })
+            const csvData = await csvResponse.json()
+            console.log(csvData.csvHeaders)
+            setCsvHeaders(csvData.csvHeaders);
+            setUploadClick(true)
+        } else {
+            alert('Upload CSV File')
+        }
     }
 
     return (
@@ -260,6 +309,7 @@ const UseMap = () => {
                                     {<input type="file" name="file" id="files" onChange={(e) => { setCsvFile(e.target.files[0]); setCsvFileName(e.target.files[0].name) }} />}
                                     {csvFile && <p class="px-">File Name: {csvFileName}</p>}
                                     <br />
+                                    <button className="btnU" onClick={handleUpload}>Upload</button>
                                 </div>
                                 <div className="options">
                                     <select name="Mappings" id="mappings" value={optValue} onChange={setMapValues}>
@@ -271,7 +321,7 @@ const UseMap = () => {
                                 </div>
                                 <input type="text" onChange={(e) => { setConversionName(e.target.value) }} placeholder="Conversion Name" className="input" style={{ width: '25%', margin: 'auto' }} />
                             </div>
-                            <input type="submit" value="Upload" class="bg-black text-lg font-semibold  text-white px-4 py-2 mt-4 rounded-2xl justify-end ml-96 mb-1" />
+                            <input type="submit" value="Convert" class="bg-black text-lg font-semibold  text-white px-4 py-2 mt-4 rounded-2xl justify-end ml-96 mb-1" />
                         </form>
                     </div>}
                     {isLoading && <div>Loading...</div>}

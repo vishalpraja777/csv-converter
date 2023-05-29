@@ -211,7 +211,7 @@ li a:hover {
 .btnU{
   margin: 30px;
   text-decoration: none;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(84, 84, 84, 0.5);
   color:  #ffffff;
   border:0;
   border-radius: 15px;
@@ -222,7 +222,7 @@ li a:hover {
 
 .btnU:hover{
   transition: all .3s ease;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(84, 84, 84, 0.8);
 }
 
 #files {

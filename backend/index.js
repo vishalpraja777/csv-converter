@@ -162,6 +162,8 @@ const uploadJson = multer({
             cb(null, "json_xml_uploads")
         },
         filename: function (req, file, cb) {
+            jsonFilename = '';
+            xmlFilename = '';
             // filename = file.originalname + "-" + Date.now() + ".json";
             // jsonFilename = Date.now() + '-' + file.originalname;
             jsonFilename = 'jsonFile.json';
@@ -177,6 +179,8 @@ const uploadXml = multer({
             cb(null, "json_xml_uploads")
         },
         filename: function (req, file, cb) {
+            jsonFilename = '';
+            xmlFilename = '';
             // filename = file.originalname + "-" + Date.now() + ".json";
             // jsonFilename = Date.now() + '-' + file.originalname;
             xmlFilename = 'xmlFile.xml';
@@ -196,9 +200,13 @@ app.post('/api/uploadcsvtoconvert', uploadCsvToConvert.array('file'), async (req
     console.log(mappingData)
 
     if (req.body.mappingType === 'json') {
+        jsonFilename = '';
+        xmlFilename = '';
         jsonFilename = convertToJson('csv_convert_uploads/' + csvFilename, mappingData)
     }
     else if (req.body.mappingType === 'xml') {
+        jsonFilename = '';
+        xmlFilename = '';
         xmlFilename = convertToXml('csv_convert_uploads/' + csvFilename, mappingData)
     }
 
@@ -226,27 +234,27 @@ app.post('/api/uploadcsvtoconvert', uploadCsvToConvert.array('file'), async (req
         }
     } catch (err) {
 
-        const jsonFilepath = 'D:/User/D_Documents/WebProjects/CSVConvertor/backend/jsonOutputs/' + jsonFilename;
-        const csvFilepath = 'csv_convert_uploads/' + csvFilename;
+        // const jsonFilepath = 'D:/User/D_Documents/WebProjects/CSVConvertor/backend/jsonOutputs/' + jsonFilename;
+        // const csvFilepath = 'csv_convert_uploads/' + csvFilename;
 
-        console.log('File csv deleted:', csvFilepath);
-        console.log('File json deleted:', jsonFilepath);
+        // console.log('File csv deleted:', csvFilepath);
+        // console.log('File json deleted:', jsonFilepath);
 
-        fs.unlink(csvFilepath, (err) => {
-            if (err) {
-                console.error('Error deleting file:', csvFilepath, err);
-            } else {
-                console.log('File deleted:', csvFilepath);
-            }
-        });
+        // fs.unlink(csvFilepath, (err) => {
+        //     if (err) {
+        //         console.error('Error deleting file:', csvFilepath, err);
+        //     } else {
+        //         console.log('File deleted:', csvFilepath);
+        //     }
+        // });
 
-        fs.unlink(jsonFilepath, (err) => {
-            if (err) {
-                console.error('Error deleting file:', jsonFilepath, err);
-            } else {
-                console.log('File deleted:', jsonFilepath);
-            }
-        });
+        // fs.unlink(jsonFilepath, (err) => {
+        //     if (err) {
+        //         console.error('Error deleting file:', jsonFilepath, err);
+        //     } else {
+        //         console.log('File deleted:', jsonFilepath);
+        //     }
+        // });
 
         return res.json({ status: 'error', error: 'Duplicate Mapping' })
     }
@@ -439,9 +447,9 @@ app.post('/api/updatemapping', async (req, res) => {
     const mappingData = req.body.mappingData
 
     try {
-    const updatedResult = await Data.findByIdAndUpdate(id, { mappingdata: mappingData }, { new: true }, )
-    console.log(updatedResult)
-    return res.json({ status: 'ok' })
+        const updatedResult = await Data.findByIdAndUpdate(id, { mappingdata: mappingData }, { new: true },)
+        console.log(updatedResult)
+        return res.json({ status: 'ok' })
     } catch (err) {
         console.log(err)
         return res.json({ status: 'error', error: 'Could Not Update Mapping' })
