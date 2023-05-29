@@ -154,7 +154,7 @@ const EditMapping = () => {
 
         if(data.status === 'ok') {
             alert('Mapping Updated')
-
+            window.location.reload()
         } else {
             alert("Couldn't update mapping")
         }
