@@ -213,42 +213,43 @@ const CreateMap = () => {
 
                     <p class="text-6xl text-gray-900 font-serif pt-10 px-20"> CSV Conversion</p>
                     <p class="px-36 text-6xl text-gray-900 font-serif "> Tool</p></div>
-                <div className="upload">
+                <div>
                     {!isUploaded &&
                         <div>
                             <form onSubmit={uplaodFile}>
-                                <div className="bothUpload">
-                                    <div
-                                        className="dragUpload"
+                                <div class = "flex justify-end space-x-10 mr-10">
+                                    <div class = "mt-32 ml-96 bg-black text-white  w-3/5 px-24 py-4 pt-6 "
                                         onDragOver={handleDrageOverCsv}
                                         onDrop={handleDropCsv}
                                     >
-                                        <p>Drag to upload sample CSV file</p>
+                                        <p>Drag or upload sample CSV file</p>
                                         {!csvFile && <input type="file" name="file" id="files" onChange={(e) => { setCsvFile(e.target.files[0]); setCsvFileName(e.target.files[0].name) }} />}
                                         {csvFile && <p>File Name: {csvFileName}</p>}
                                         <br />
                                     </div>
-                                    <div
-                                        className="dragUpload"
+                                    <div class = "mt-32 ml-96 bg-black text-white  w-3/5 px-24 py-4 pt-6 mr-16"
                                         onDragOver={handleDrageOverJson}
                                         onDrop={handleDropJson}
                                     >
-                                        <p>Drag to upload sample JSON file</p>
+                                        <p>Drag or upload sample JSON file</p>
                                         {!jsonFile && <input type="file" name="file" id="files" onChange={(e) => { setJsonFile(e.target.files[0]); setJsonFileName(e.target.files[0].name) }} />}
                                         {jsonFile && <p>File Name: {jsonFileName}</p>}
                                         <br />
                                     </div>
                                 </div>
-                                <input type="submit" value="Upload" className="btnU" />
+                                <div class = "flex justify-end py-16 mt-7">
+                                <input class="  bg-black text-white  font-semibold mr-10 text-3xl  flex p-3 rounded-3xl hover:bg-gray-400 active:bg-slate-200" type="submit" value="Upload"/>
+                                <p> </p>
+                            </div>
                             </form>
                         </div>
                     }
                     {isUploaded && <div>
-                        <button className="btnU" onClick={handleNew}>Upload New Files</button>
+        
 
-                        <div className="mappingContent">
-                            {<div className="csvContent">
-                                <h1>JSON Headers</h1>
+                        <div class = "flex space-x-64 px-44 mt-16 ml-96 justify-end mr-48" >
+                            {<div >
+                                <h1 class = "font-bold underline mb-4 text-lg">JSON Headers</h1>
                                 {
                                     jsonHeaders.map((header) => (
                                         <div>
@@ -267,7 +268,7 @@ const CreateMap = () => {
                             </div>}
 
                             {<div className="jsonContent">
-                                <h1>CSV Headers</h1>
+                                <h1 class = "font-bold underline mb-4 text-lg">CSV Headers</h1>
                                 {
                                     csvHeaders.map((header) => (
                                         <div
@@ -282,10 +283,14 @@ const CreateMap = () => {
                                 }
                             </div>}
                         </div>
-                        <form onSubmit={createMapping} className="mapForm">
-                            <input type="text" onChange={(e) => { setMapName(e.target.value) }} placeholder="Map Name" className="input" />
-                            <input type="submit" value="Create Mapping" className="btn" />
+                        <form class = "ml-96 flex justify-end space-x-32 mr-96 mt-8 " onSubmit={createMapping}>
+                            <input class="  bg-black text-white  font-semibold mr-10 " type="text" onChange={(e) => { setMapName(e.target.value) }} placeholder="Map Name"  />
+                            <input class="  bg-black text-white  font-semibold mr-10 text-xl flex p-3 rounded-3xl hover:bg-gray-400 active:bg-slate-200 mb-8" type="submit" value="Create Mapping"  />
                         </form>
+                        <div class  = "ml-96 flex justify-end space-x-32 mr-96 mt-8">
+                        <button class="  bg-black text-white ml-96  font-semibold mr-10 text-xl  flex p-3 rounded-3xl hover:bg-gray-400 active:bg-slate-200"  onClick={handleNew}>Upload New Files</button>
+                        <p></p>
+                        </div>
                     </div>
                     }
                 </div>

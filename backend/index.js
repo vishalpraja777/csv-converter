@@ -21,7 +21,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect('mongodb://localhost:27017/csvConverter')
+mongoose.connect('mongodb://127.0.0.1:27017/csvConverter')
 
 let csvFilename = '';
 let jsonFilename = '';

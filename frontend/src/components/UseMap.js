@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import './About.css';
 import bg from './images/bg.webp'
+import upload from './images/upload.webp'
+import download from './images/download.png'
 
 
 const UseMap = () => {
@@ -300,37 +302,52 @@ const UseMap = () => {
 
                         <form onSubmit={uplaodFile}>
                             <div >
-                                <div class="mt-32 ml-96 bg-black text-white  w-3/5 px-24 py-4 pt-6 "
+                                <div class = "mt-8 ml-96 bg-black text-white  w-3/5 px-24 py-4 pt-6 "
 
                                     onDragOver={handleDrageOverCsv}
                                     onDrop={handleDropCsv}
                                 >
-                                    <h1 class="font-serif text-3xl py-6">Drag or browse new csv file upload CSV file</h1>
+                                    <h1 class = "font-serif text-3xl py-6">Drag or browse new csv file upload CSV file</h1>
                                     {<input type="file" name="file" id="files" onChange={(e) => { setCsvFile(e.target.files[0]); setCsvFileName(e.target.files[0].name) }} />}
                                     {csvFile && <p class="px-">File Name: {csvFileName}</p>}
                                     <br />
-                                    <button className="btnU" onClick={handleUpload}>Upload</button>
+                                    <div class = "ml-96 justify-between ">
+                                    <button class= "bg-black text-lg font-semibold  text-white px-4 py-2 mt-4 rounded-2xl justify-end ml-96 mb-1 hover:bg-gray-800 active:bg-slate-200"  onClick={handleUpload}>Upload</button>
+                                    <p class = "mr-96" ></p>
                                 </div>
-                                <div className="options">
-                                    <select name="Mappings" id="mappings" value={optValue} onChange={setMapValues}>
+                                </div >
+                                <div class="ml-96 mt-2">
+                                    <select class = " ml-96 bg-black text-white px-2 py-2 mb-4" name="Mappings" id="mappings" value={optValue} onChange={setMapValues}>
                                         <option selected>--Select--</option>
                                         {
                                             mapData?.map(item => <option>{item.mappingname}</option>)
                                         }
                                     </select>
-                                </div>
-                                <input type="text" onChange={(e) => { setConversionName(e.target.value) }} placeholder="Conversion Name" className="input" style={{ width: '25%', margin: 'auto' }} />
-                            </div>
+                                
+                                <div class = " mt-2 justify-center  space-x-16 px-2 py-2 mr-96 ml-72">
+                                <input class = "text-white bg-black ml-96 rounded-md px-2 py-2 text-sm" type="text" onChange={(e) => { setConversionName(e.target.value) }} placeholder="Conversion Name"  style={{ width: '25%', margin: 'auto' }} />
+                            
                             <input type="submit" value="Convert" class="bg-black text-lg font-semibold  text-white px-4 py-2 mt-4 rounded-2xl justify-end ml-96 mb-1" />
+                            <p></p>
+                            </div>
+                            </div>
+                        </div>
                         </form>
                     </div>}
                     {isLoading && <div>Loading...</div>}
-                    {fileUploaded && <div>
+                    <div class = " flex mt-28 justify-end mr-36 space-x-36">
+                    <img src={download} class="h-40 rounded-full" alt="" sizes=" " srcset="" />
+                    <img src={upload} class="h-40 rounded-full" alt="" sizes=" " srcset="" />
+                    </div>
+                    {fileUploaded && <div class = " flex mt-8 justify-end mr-36 space-x-36 mb-6">
                         <form onSubmit={handleDownload}>
                             <button class="bg-black text-lg font-semibold  text-white px-4 py-2 rounded-2xl justify-end ml-96" type="submit" >Download</button>
+                            
                         </form>
                         <button class="bg-black text-lg font-semibold  text-white px-4 py-3 rounded-2xl justify-end ml-96" onClick={() => { setMain(true); setFileUploaded(false); setCsvFile('') }} >Upload Another</button>
+                        
                     </div>}
+                    <p class = "py-10"></p>
                 </div>
             </div>
         </div>

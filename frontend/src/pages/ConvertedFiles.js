@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import './main.css';
+import bg from './images/bg.webp'
 
 const ConvertedFiles = () => {
 
@@ -85,9 +87,13 @@ const ConvertedFiles = () => {
     return (
         <div>
             <Navbar />
-            <div>
-                <table>
-                    <tr>
+            <div class="w-full h-1/4 bg-no-repeat bg-cover bg-center bg-fixed" 
+             style={{ backgroundImage: `url(${bg})` }}>
+            <div class="h-full  w-full pt-20 px-20"> 
+                    <p class="text-6xl text-gray-900 font-serif pt-10 px-20"> CSV Conversion</p>
+                    <p class="px-36 text-6xl text-gray-900 font-serif "> Tool</p>
+                <table class = " ml-96 mt-12 ">
+                    <tr class = "font-bold text-2xl">
                         <th>Conversion Name</th>
                         <th>Mapping Name</th>
                         <th>Mapping Type</th>
@@ -96,17 +102,19 @@ const ConvertedFiles = () => {
                     </tr>
                     {
                         conversionData?.map((item) =>
-                            <tr>
+                            <tr class = "text-lg font-semibold"> 
                                 <td>{item.conversionname}</td>
                                 <td>{item.mappingname}</td>
                                 <td>{item.mappingtype.toUpperCase()}</td>
-                                <td>{item.csvfile.slice(14)} <button onClick={(e) => handleDownload(e, item.csvfile, 'csv')}>Download</button></td>
-                                {item.jsonfile && <td>{item.jsonfile.slice(14)} <button onClick={(e) => handleDownload(e, item.jsonfile, 'json')}>Download</button></td> }
-                                {item.xmlfile && <td>{item.xmlfile.slice(14)} <button onClick={(e) => handleDownload(e, item.xmlfile, 'xml')}>Download</button></td> }
+                                <td>{item.csvfile.slice(14)} <button class="  bg-black text-white  m-2  font-medium   p-2 rounded-3xl hover:bg-gray-800 active:bg-slate-200"  onClick={(e) => handleDownload(e, item.csvfile, 'csv')}>Download</button></td>
+                                {item.jsonfile && <td>{item.jsonfile.slice(14)} <button class="  bg-black m-2 text-white    font-medium   p-2 rounded-3xl hover:bg-gray-800 active:bg-slate-200" onClick={(e) => handleDownload(e, item.jsonfile, 'json')}>Download</button></td> }
+                                {item.xmlfile && <td>{item.xmlfile.slice(14)} <button class="  bg-black m-2 text-white    font-medium   p-2 rounded-3xl hover:bg-gray-800 active:bg-slate-200"  onClick={(e) => handleDownload(e, item.xmlfile, 'xml')}>Download</button></td> }
                             </tr>
                         )
                     }
                 </table>
+                <p class = "py-40"></p>
+            </div>
             </div>
         </div>
     );
