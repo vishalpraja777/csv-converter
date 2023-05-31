@@ -1,5 +1,7 @@
 import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
+import './main.css';
+import bg from './images/bg.webp'
 
 
 const EditMapping = () => {
@@ -169,26 +171,31 @@ const EditMapping = () => {
     }
 
     return (
-        <div>
+        <div className="w-full h-1/4 bg-no-repeat bg-cover bg-center bg-fixed"
+        style={{ backgroundImage: `url(${bg})` }}>
             <Navbar />
-            {tableView && <div>
-                <table>
-                    <tr>
+            <div class="h-full  w-full   text-gray-900 font-serif  px-20">
+                    <p class="text-6xl text-gray-900 font-serif pt-28 px-20"> CSV Conversion</p>
+                    <p class="px-36 text-6xl text-gray-900 font-serif "> Tool</p>
+                    {tableView && <div class = "py-44">
+                    <table class = " ml-96  ">
+                    <tr class = "font-bold text-2xl">
                         <th>Map Name</th>
                         <th>Map Type</th>
                         <th>Edit</th>
                     </tr>
                     {
                         mapData?.map((item) =>
-                            <tr>
+                            <tr class = "font-semibold text-lg">
                                 <td>{item.mappingname}</td>
                                 <td>{item.mappingtype.toUpperCase()}</td>
-                                <td><button onClick={(e) => handleEdit(e, item)}>Edit</button></td>
+                                <td><button class="  bg-black text-white  font-semibold mr-10 text-lg p-3 rounded-xl ml-2 hover:bg-gray-400 active:bg-slate-200" onClick={(e) => handleEdit(e, item)}>Edit</button></td>
                             </tr>
                         )
                     }
                 </table>
             </div>}
+            </div>
             {editView && <div>
                 <div className="mappingContent">
                     {jsonType && <div className="jsonContent">
@@ -209,26 +216,6 @@ const EditMapping = () => {
                             ))
                         }
                     </div>}
-
-                    {/*xmlType && <div className="csvContent">
-                        <h1>XML Headers</h1>
-                        {
-                            jsonHeaders?.map((header) => (
-                                <div>
-                                    <div
-                                        className="dragDiv"
-                                        onDragOver={handleDragOverMap}
-                                        onDrop={(e) => { handleDropMap(e, header) }}
-                                    >
-                                        <div className="mapKey borderCommon">{header}</div>
-                                        <div style={{ marginLeft: "20px" }}>=&gt;</div>
-                                        <div className="mapValue borderCommon">{mappings.get(header)}</div>
-                                    </div>
-                                </div>
-                            ))
-                        }
-                    </div>*/}
-
                     <div className="csvContent">
                         <h1>CSV Headers</h1>
                         {
@@ -248,7 +235,7 @@ const EditMapping = () => {
                 <button className="btnU" onClick={saveEdit}>Save Edit</button>
                 <button className="btnU" onClick={cancelEdit}>Cancel Edit</button>
             </div>}
-        </div>
+            </div>
     );
 }
 
