@@ -471,6 +471,19 @@ app.get('/api/getmapdata/:userid', async (req, res) => {
         });
 })
 
+app.get('/api/getuserdata/:userid', async (req, res) => {
+    console.log(req.params.userid)
+    const userId = req.params.userid
+    console.log(userId)
+    User.findById(userId)
+        .then((result) => {
+            res.send(result);
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).send('Internal Server Error');
+        });
+})
+
 // API to get conversion data
 app.get('/api/getconversiondata/:userid', async (req, res) => {
     console.log(req.params.userid)

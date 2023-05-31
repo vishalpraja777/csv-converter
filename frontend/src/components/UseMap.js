@@ -320,7 +320,7 @@ const UseMap = () => {
                                     <select class = " ml-96 bg-black text-white px-2 py-2 mb-4" name="Mappings" id="mappings" value={optValue} onChange={setMapValues}>
                                         <option selected>--Select--</option>
                                         {
-                                            mapData?.map(item => <option>{item.mappingname}</option>)
+                                            mapData?.map(item => <option>{item.mappingtype.toUpperCase()+ ' - ' + item.mappingname}</option>)
                                         }
                                     </select>
                                 

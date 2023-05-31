@@ -40,7 +40,7 @@ const EditMapping = () => {
                 reader.read().then(({ done, value }) => {
                     if (done) {
                         console.log('end...')
-                        return;
+                        return; 
                     }
                     const decoder = new TextDecoder();
                     const strData = decoder.decode(value)

@@ -190,7 +190,7 @@ const CreateXmlMap = () => {
 
 
             if (csvData.status === 'ok' && xmlData.status === 'ok') {
-                alert('File Uploaded')
+                // alert('File Uploaded')
                 setIsUploaded(true)
             } else {
                 alert("File couldn't be uploaded")
