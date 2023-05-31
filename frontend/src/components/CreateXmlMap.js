@@ -249,7 +249,7 @@ const CreateXmlMap = () => {
                     
                     <div class = "flex space-x-64 px-44 mt-16 ml-96 justify-end mr-18" >
                         {<div >
-                            <h1 class = "font-bold underline mb-4 text-lg">XML Headers</h1>
+                            <h1 class = "font-bold underline mb-4 text-lg">XML_Headers</h1>
                             {
                                 xmlHeaders?.map((header) => (
                                     <div>
@@ -258,25 +258,25 @@ const CreateXmlMap = () => {
                                             onDragOver={handleDragOverMap}
                                             onDrop={(e) => { handleDropMap(e, header) }}
                                         >
-                                            <div className="mapKey borderCommon">{header}</div>
+                                            <div className="p-1 bg-black text-white rounded-xl">{header}</div>
                                             <div style={{ marginLeft: "20px" }}>=&gt;</div>
-                                            <div className="mapValue borderCommon">{mappings.get(header)}</div>
+                                            <div className="p-1 bg-black text-white rounded-xl">{mappings.get(header)}</div>
                                         </div>
                                     </div>
                                 ))
                             }
                         </div>}
 
-                        {<div className="jsonContent">
-                            <h1 class = "font-bold underline mb-4 text-lg">CSV Headers</h1>
+                        {<div>
+                            <h1 class = "font-bold underline mb-4 text-lg">CSV_Headers</h1>
                             {
                                 csvHeaders?.map((header) => (
                                     <div
-                                        className="jsonItem1"
+                                        // className="jsonItem1"
                                         draggable
                                         onDragStart={(e) => { handleOnDragStart(e, header) }}
                                     >
-                                        <div className="jsonItem borderCommon">{header}</div>
+                                        <div className="p-1 bg-black text-white rounded-xl">{header}</div>
                                         <br />
                                     </div>
                                 ))
@@ -284,7 +284,7 @@ const CreateXmlMap = () => {
                         </div>}
                     </div>
                     <form class = "ml-96 flex justify-end space-x-32 mr-96 mt-8 " onSubmit={createMapping} >
-                        <input class="  bg-black text-white  font-semibold mr-10 " type="text" onChange={(e) => { setMapName(e.target.value) }} placeholder="Map Name" s />
+                        <input class="  bg-black text-white  font-semibold mr-10 " style={{padding:"10px"}} type="text" onChange={(e) => { setMapName(e.target.value) }} placeholder="Map Name" s />
                         <input class="  bg-black text-white  font-semibold mr-10 text-xl p-3 rounded-3xl hover:bg-gray-400 active:bg-slate-200 mb-8 "  type="submit" value="Create Mapping"  />
                     </form>
                     <div class  = "ml-96 flex justify-end space-x-32 mr-96 mt-8">
